@@ -159,3 +159,19 @@ updix_status_t updix_st(updix_pointer_mode_t pointer_mode, uint8_t size_field,
 
     return UPDIX_OK;
 }
+
+
+updix_status_t updix_ldcs(updix_cs_register_t cs_register, uint8_t *result)
+{
+    uint8_t tx_buffer[2] = {0x00};
+    uint8_t rx_buffer[1] = {0x00};
+
+    set_instr_header(UPDIX_LDCS, tx_buffer, 0x00, cs_register);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+    UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, 1));
+
+    *result = *rx_buffer;
+
+    return UPDIX_OK;
+}
