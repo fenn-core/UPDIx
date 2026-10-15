@@ -175,3 +175,17 @@ updix_status_t updix_ldcs(updix_cs_register_t cs_register, uint8_t *result)
 
     return UPDIX_OK;
 }
+
+
+updix_status_t updix_stcs(updix_cs_register_t cs_register, uint8_t value)
+{
+    uint8_t tx_buffer[3] = {0x00};
+
+    set_instr_header(UPDIX_STCS, tx_buffer, 0x00, cs_register);
+
+    tx_buffer[2] = value;
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 3));
+
+    return UPDIX_OK;
+}
