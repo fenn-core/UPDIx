@@ -58,3 +58,27 @@ static void serialize_data(uint16_t data, updix_data_size_t data_size, uint8_t *
             break;
     }
 }
+
+
+updix_status_t updix_lds(uint32_t addr, updix_address_size_t address_size,
+                         updix_data_size_t data_size, uint16_t *result)
+{
+    uint8_t tx_buffer[5] = {0x00};
+    uint8_t rx_buffer[2] = {0x00};
+
+    set_instr_header(UPDIX_LDS, tx_buffer, address_size, data_size);
+
+    serialize_address(addr, address_size, (tx_buffer + 2));
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, (address_size + 3)));
+    UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, (data_size + 1)));
+
+    *result = rx_buffer[0];
+
+    if (data_size == UPDIX_DATA_SIZE_16)
+    {
+        *result |= ((uint16_t)rx_buffer[1] << 8);
+    }
+
+    return UPDIX_OK;
+}
