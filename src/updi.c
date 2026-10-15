@@ -82,3 +82,35 @@ updix_status_t updix_lds(uint32_t addr, updix_address_size_t address_size,
 
     return UPDIX_OK;
 }
+
+
+updix_status_t updix_sts(uint32_t addr, uint16_t data, updix_address_size_t address_size,
+                         updix_data_size_t data_size)
+{
+    uint8_t tx_buffer[5] = {0x00};
+    uint8_t rx_buffer[1] = {0x00};
+
+    set_instr_header(UPDIX_STS, tx_buffer, address_size, data_size);
+
+    serialize_address(addr, address_size, (tx_buffer + 2));
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, (address_size + 3)));
+    UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, 1));
+
+    if (*rx_buffer != UPDIX_ACK)
+    {
+        return UPDIX_ERROR_ACK;
+    }
+
+    serialize_data(data_size, data, tx_buffer);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, (data_size + 1)));
+    UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, 1));
+
+    if (*rx_buffer != UPDIX_ACK)
+    {
+        return UPDIX_ERROR_ACK;
+    }
+
+    return UPDIX_OK;
+}
