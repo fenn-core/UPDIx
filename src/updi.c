@@ -114,3 +114,23 @@ updix_status_t updix_sts(uint32_t addr, uint16_t data, updix_address_size_t addr
 
     return UPDIX_OK;
 }
+
+
+updix_status_t updix_ld(updix_pointer_mode_t pointer_mode, uint8_t size_field,
+                        uint32_t *result)
+{
+    uint8_t tx_buffer[3] = {0x00};
+    uint8_t rx_buffer[3] = {0x00};
+
+    set_instr_header(UPDIX_LD, tx_buffer, pointer_mode, size_field);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+    UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, (size_field + 1)));
+
+    for (uint8_t i = 0; i < (size_field + 1); ++i)
+    {
+        *result |= ((uint32_t)rx_buffer[i] << (8 * i));
+    }
+
+    return UPDIX_OK;
+}
