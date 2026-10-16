@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "uart.h"
 #include "updix.h"
+#include "updix_uart.h"
 
 
 typedef enum
