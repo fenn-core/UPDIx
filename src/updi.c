@@ -16,6 +16,16 @@ typedef enum
 } updix_instr_base_t;
 
 
+static const uint8_t updix_key_nvmprog[8] = {0x20, 0x67, 0x6F, 0x72,
+                                             0x50, 0x4D, 0x56, 0x4E};
+
+static const uint8_t updix_key_chiperase[8] = {0x65, 0x73, 0x61, 0x72,
+                                               0x45, 0x4D, 0x56, 0x4E};
+
+static const uint8_t updix_key_userrow[8] = {0x65, 0x74, 0x26, 0x73,
+                                             0x55, 0x4D, 0x56, 0x4E};
+
+
 static void set_instr_header(updix_instr_base_t instr_base, uint8_t *buffer,
                              uint8_t higher_byte, uint8_t lower_byte)
 {

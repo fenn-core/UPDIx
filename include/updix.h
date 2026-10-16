@@ -55,6 +55,14 @@ typedef enum
 
 typedef enum
 {
+    UPDIX_NVMPROG = 0x00,
+    UPDIX_CHIPERASE = 0x01,
+    UPDIX_USERROW = 0x02,
+} updix_activation_key_t;
+
+
+typedef enum
+{
     UPDIX_CS_STATUSA = 0x00,
     UPDIX_CS_STATUSB = 0x01,
     UPDIX_CS_CTRLA = 0x02,
