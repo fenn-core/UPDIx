@@ -22,6 +22,7 @@ typedef enum
     UPDIX_ERROR_TIMEOUT,
     UPDIX_ERROR_ACK,
     UPDIX_ERROR_PROTOCOL,
+    UPDIX_ERROR_TARGET_LOCKED,
 } updix_status_t;
 
 
