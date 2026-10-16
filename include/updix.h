@@ -85,4 +85,42 @@ typedef enum
 } updix_cs_register_t;
 
 
+updix_status_t updix_lds(uint32_t addr, updix_address_size_t address_size,
+                         updix_data_size_t data_size, uint16_t *result);
+
+
+updix_status_t updix_sts(uint32_t addr, updix_address_size_t address_size,
+                         updix_data_size_t data_size, uint16_t data);
+
+
+updix_status_t updix_ld(updix_pointer_mode_t pointer_mode, uint8_t size_field,
+                        uint32_t *result);
+
+
+updix_status_t updix_st(updix_pointer_mode_t pointer_mode, uint8_t size_field,
+                        uint32_t data);
+
+
+updix_status_t updix_repeat(uint8_t repeat_count);
+
+
+updix_status_t updix_read_block(uint32_t address, updix_address_size_t address_size,
+                                updix_data_size_t data_size, uint8_t *buffer,
+                                uint16_t element_count);
+
+
+updix_status_t updix_write_block(uint32_t address, updix_address_size_t address_size,
+                                 updix_data_size_t data_size, const uint8_t *buffer,
+                                 uint16_t element_count);
+
+
+updix_status_t updix_ldcs(updix_cs_register_t cs_register, uint8_t *result);
+
+
+updix_status_t updix_stcs(updix_cs_register_t cs_register, uint8_t value);
+
+
+updix_status_t updix_key(updix_key_mode_t mode, updix_key_size_t key_size, void *buffer);
+
+
 #endif
