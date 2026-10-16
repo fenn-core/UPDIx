@@ -189,3 +189,15 @@ updix_status_t updix_stcs(updix_cs_register_t cs_register, uint8_t value)
 
     return UPDIX_OK;
 }
+
+
+static updix_status_t updix_repeat(uint8_t repeat_count)
+{
+    uint8_t tx_buffer[2] = {0x00};
+
+    set_instr_header(UPDIX_REPEAT, tx_buffer, 0x00, repeat_count);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+
+    return UPDIX_OK;
+}
