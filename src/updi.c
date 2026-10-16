@@ -171,6 +171,83 @@ updix_status_t updix_st(updix_pointer_mode_t pointer_mode, uint8_t size_field,
 }
 
 
+static updix_status_t updix_repeat(uint8_t repeat_count)
+{
+    uint8_t tx_buffer[2] = {0x00};
+
+    set_instr_header(UPDIX_REPEAT, tx_buffer, 0x00, repeat_count);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+
+    return UPDIX_OK;
+}
+
+
+updix_status_t updix_read_block(updix_address_size_t address_size, uint32_t address,
+                                uint8_t *buffer, uint16_t element_count,
+                                updix_data_size_t data_size)
+{
+    // For 16 bit data, provide a buffer that is twice as long as the element count.
+
+    if (element_count == 0 || element_count > 256)
+    {
+        return UPDIX_ERROR_INVALID_ARGUMENT;
+    }
+
+    uint8_t tx_buffer[2] = {0x00};
+
+    UPDIX_CHECK_STATUS(updix_st(UPDIX_POINTER_MODE_REGISTER, address_size, address));
+
+    UPDIX_CHECK_STATUS(updix_repeat(element_count - 1));
+
+    set_instr_header(UPDIX_LD, tx_buffer, UPDIX_POINTER_MODE_POST_INCREMENT, data_size);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+
+    UPDIX_CHECK_UART(updix_uart_rx(buffer, element_count * (data_size + 1)));
+
+    return UPDIX_OK;
+}
+
+
+updix_status_t updix_write_block(updix_address_size_t address_size, uint32_t address,
+                                 const uint8_t *buffer, uint16_t element_count,
+                                 updix_data_size_t data_size)
+{
+    // For transmitting 16 bit data, provide the buffer in little endian form.
+
+    if (element_count == 0 || element_count > 256)
+    {
+        return UPDIX_ERROR_INVALID_ARGUMENT;
+    }
+
+    uint8_t tx_buffer[2] = {0x00};
+    uint8_t rx_buffer[1] = {0x00};
+
+    UPDIX_CHECK_STATUS(updix_st(UPDIX_POINTER_MODE_REGISTER, address_size, address));
+
+    UPDIX_CHECK_STATUS(updix_repeat(element_count - 1));
+
+    set_instr_header(UPDIX_ST, tx_buffer, UPDIX_POINTER_MODE_POST_INCREMENT, data_size);
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+
+    for (uint16_t i = 0; i < element_count; ++i)
+    {
+        UPDIX_CHECK_UART(updix_uart_tx(buffer, data_size + 1));
+        UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, 1));
+
+        if (*rx_buffer != UPDIX_ACK)
+        {
+            return UPDIX_ERROR_ACK;
+        }
+        buffer += (data_size + 1);
+    }
+
+    return UPDIX_OK;
+}
+
+
 updix_status_t updix_ldcs(updix_cs_register_t cs_register, uint8_t *result)
 {
     uint8_t tx_buffer[2] = {0x00};
@@ -193,18 +270,6 @@ updix_status_t updix_stcs(updix_cs_register_t cs_register, uint8_t value)
     tx_buffer[2] = value;
 
     UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 3));
-
-    return UPDIX_OK;
-}
-
-
-static updix_status_t updix_repeat(uint8_t repeat_count)
-{
-    uint8_t tx_buffer[2] = {0x00};
-
-    set_instr_header(UPDIX_REPEAT, tx_buffer, 0x00, repeat_count);
-
-    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
 
     return UPDIX_OK;
 }
