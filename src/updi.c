@@ -137,6 +137,8 @@ updix_status_t updix_ld(updix_pointer_mode_t pointer_mode, uint8_t size_field,
     UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
     UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, (size_field + 1)));
 
+    *result = 0;
+
     for (uint8_t i = 0; i < (size_field + 1); ++i)
     {
         *result |= ((uint32_t)rx_buffer[i] << (8 * i));
@@ -173,11 +175,13 @@ updix_status_t updix_st(updix_pointer_mode_t pointer_mode, uint8_t size_field,
 
 static updix_status_t updix_repeat(uint8_t repeat_count)
 {
-    uint8_t tx_buffer[2] = {0x00};
+    uint8_t tx_buffer[3] = {0x00};
 
-    set_instr_header(UPDIX_REPEAT, tx_buffer, 0x00, repeat_count);
+    set_instr_header(UPDIX_REPEAT, tx_buffer, 0x00, 0x00);
 
-    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+    tx_buffer[2] = repeat_count;
+
+    UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 3));
 
     return UPDIX_OK;
 }
