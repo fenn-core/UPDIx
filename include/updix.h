@@ -4,6 +4,15 @@
 #define UPDIX_SYNCH 0x55
 #define UPDIX_ACK 0x40
 
+#define UPDIX_CHECK_STATUS(code)                                                         \
+    do                                                                                   \
+    {                                                                                    \
+        updix_status_t status = (code);                                                  \
+        if (status != UPDIX_OK)                                                          \
+        {                                                                                \
+            return status;                                                               \
+        }                                                                                \
+    } while (0)
 
 typedef enum
 {
