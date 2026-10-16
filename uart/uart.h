@@ -4,16 +4,18 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define UPDIX_CHECK_UART(code) \
-    do \
-    { \
-        if ((code) == UPDIX_UART_ERROR_TIMEOUT) { \
-            return UPDIX_ERROR_TIMEOUT; \
-        } \
-        else if ((code) != UPDIX_UART_OK) \
-        { \
-            return UPDIX_ERROR_TRANSPORT; \
-        } \
+#define UPDIX_CHECK_UART(code)                                                           \
+    do                                                                                   \
+    {                                                                                    \
+        updix_uart_status_t status = (code);                                             \
+        if (status == UPDIX_UART_ERROR_TIMEOUT)                                          \
+        {                                                                                \
+            return UPDIX_ERROR_TIMEOUT;                                                  \
+        }                                                                                \
+        else if (status != UPDIX_UART_OK)                                                \
+        {                                                                                \
+            return UPDIX_ERROR_TRANSPORT;                                                \
+        }                                                                                \
     } while (0)
 
 
