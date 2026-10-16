@@ -173,7 +173,7 @@ updix_status_t updix_st(updix_pointer_mode_t pointer_mode, uint8_t size_field,
 }
 
 
-static updix_status_t updix_repeat(uint8_t repeat_count)
+updix_status_t updix_repeat(uint8_t repeat_count)
 {
     uint8_t tx_buffer[3] = {0x00};
 
