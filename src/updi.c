@@ -174,14 +174,11 @@ updix_status_t updix_st(updix_pointer_mode_t pointer_mode, uint8_t size_field,
 updix_status_t updix_ldcs(updix_cs_register_t cs_register, uint8_t *result)
 {
     uint8_t tx_buffer[2] = {0x00};
-    uint8_t rx_buffer[1] = {0x00};
 
     set_instr_header(UPDIX_LDCS, tx_buffer, 0x00, cs_register);
 
     UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
-    UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, 1));
-
-    *result = *rx_buffer;
+    UPDIX_CHECK_UART(updix_uart_rx(result, 1));
 
     return UPDIX_OK;
 }
@@ -208,6 +205,58 @@ static updix_status_t updix_repeat(uint8_t repeat_count)
     set_instr_header(UPDIX_REPEAT, tx_buffer, 0x00, repeat_count);
 
     UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+
+    return UPDIX_OK;
+}
+
+
+updix_status_t updix_key(updix_key_mode_t mode, updix_key_size_t key_size, void *buffer)
+{
+    /*
+     * The buffer argument accepts a void pointer to a updix_activation_key_t enum
+     * when the mode is UPDIX_KEY_MODE_SEND, and receives the read SIB value
+     * as uint8_t when the mode is UPDIX_KEY_MODE_READ_SIB
+     *
+     * The UPDIX_KEY_SIZE_128 option is only valid for SIB reads, not sends
+     */
+
+    uint8_t tx_buffer[10] = {0x00};
+    const uint8_t *key_ptr;
+
+    set_instr_header(UPDIX_KEY, tx_buffer, mode, key_size);
+
+    switch (mode)
+    {
+    case UPDIX_KEY_MODE_SEND:
+        switch (*((updix_activation_key_t *)buffer))
+        {
+        case UPDIX_NVMPROG:
+            key_ptr = updix_key_nvmprog;
+            break;
+        case UPDIX_CHIPERASE:
+            key_ptr = updix_key_chiperase;
+            break;
+        case UPDIX_USERROW:
+            key_ptr = updix_key_userrow;
+            break;
+
+        default:
+            return UPDIX_ERROR_INVALID_ARGUMENT;
+        }
+
+        for (uint8_t i = 0; i < 8; ++i)
+        {
+            tx_buffer[i + 2] = key_ptr[i];
+        }
+
+        UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 10));
+        break;
+
+    case UPDIX_KEY_MODE_READ_SIB:
+        UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, 2));
+        UPDIX_CHECK_UART(updix_uart_rx((uint8_t *)buffer, (key_size + 1) * 8));
+        break;
+    }
 
     return UPDIX_OK;
 }
