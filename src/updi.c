@@ -94,8 +94,8 @@ updix_status_t updix_lds(uint32_t addr, updix_address_size_t address_size,
 }
 
 
-updix_status_t updix_sts(uint32_t addr, uint16_t data, updix_address_size_t address_size,
-                         updix_data_size_t data_size)
+updix_status_t updix_sts(uint32_t addr, updix_address_size_t address_size,
+                         updix_data_size_t data_size, uint16_t data)
 {
     uint8_t tx_buffer[5] = {0x00};
     uint8_t rx_buffer[1] = {0x00};
@@ -112,7 +112,7 @@ updix_status_t updix_sts(uint32_t addr, uint16_t data, updix_address_size_t addr
         return UPDIX_ERROR_ACK;
     }
 
-    serialize_data(data_size, data, tx_buffer);
+    serialize_data(data, data_size, tx_buffer);
 
     UPDIX_CHECK_UART(updix_uart_tx(tx_buffer, (data_size + 1)));
     UPDIX_CHECK_UART(updix_uart_rx(rx_buffer, 1));
@@ -183,9 +183,9 @@ static updix_status_t updix_repeat(uint8_t repeat_count)
 }
 
 
-updix_status_t updix_read_block(updix_address_size_t address_size, uint32_t address,
-                                uint8_t *buffer, uint16_t element_count,
-                                updix_data_size_t data_size)
+updix_status_t updix_read_block(uint32_t address, updix_address_size_t address_size,
+                                updix_data_size_t data_size, uint8_t *buffer,
+                                uint16_t element_count)
 {
     // For 16 bit data, provide a buffer that is twice as long as the element count.
 
@@ -210,9 +210,9 @@ updix_status_t updix_read_block(updix_address_size_t address_size, uint32_t addr
 }
 
 
-updix_status_t updix_write_block(updix_address_size_t address_size, uint32_t address,
-                                 const uint8_t *buffer, uint16_t element_count,
-                                 updix_data_size_t data_size)
+updix_status_t updix_write_block(uint32_t address, updix_address_size_t address_size,
+                                 updix_data_size_t data_size, const uint8_t *buffer,
+                                 uint16_t element_count)
 {
     // For transmitting 16 bit data, provide the buffer in little endian form.
 

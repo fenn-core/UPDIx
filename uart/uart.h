@@ -1,8 +1,8 @@
 #ifndef INC_UPDIX_UART_H_
 #define INC_UPDIX_UART_H_
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #define UPDIX_CHECK_UART(code)                                                           \
     do                                                                                   \
