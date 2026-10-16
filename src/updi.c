@@ -29,18 +29,18 @@ static void serialize_address(uint32_t addr, updix_address_size_t address_size,
 {
     switch (address_size)
     {
-        case UPDIX_ADDRESS_SIZE_8:
-            buffer[0] = (uint8_t)(addr >> 0);
-            break;
-        case UPDIX_ADDRESS_SIZE_16:
-            buffer[0] = (uint8_t)(addr >> 0);
-            buffer[1] = (uint8_t)(addr >> 8);
-            break;
-        case UPDIX_ADDRESS_SIZE_24:
-            buffer[0] = (uint8_t)(addr >> 0);
-            buffer[1] = (uint8_t)(addr >> 8);
-            buffer[2] = (uint8_t)(addr >> 16);
-            break;
+    case UPDIX_ADDRESS_SIZE_8:
+        buffer[0] = (uint8_t)(addr >> 0);
+        break;
+    case UPDIX_ADDRESS_SIZE_16:
+        buffer[0] = (uint8_t)(addr >> 0);
+        buffer[1] = (uint8_t)(addr >> 8);
+        break;
+    case UPDIX_ADDRESS_SIZE_24:
+        buffer[0] = (uint8_t)(addr >> 0);
+        buffer[1] = (uint8_t)(addr >> 8);
+        buffer[2] = (uint8_t)(addr >> 16);
+        break;
     }
 }
 
@@ -49,13 +49,13 @@ static void serialize_data(uint16_t data, updix_data_size_t data_size, uint8_t *
 {
     switch (data_size)
     {
-        case UPDIX_DATA_SIZE_8:
-            buffer[0] = (uint8_t)(data >> 0);
-            break;
-        case UPDIX_DATA_SIZE_16:
-            buffer[0] = (uint8_t)(data >> 0);
-            buffer[1] = (uint8_t)(data >> 8);
-            break;
+    case UPDIX_DATA_SIZE_8:
+        buffer[0] = (uint8_t)(data >> 0);
+        break;
+    case UPDIX_DATA_SIZE_16:
+        buffer[0] = (uint8_t)(data >> 0);
+        buffer[1] = (uint8_t)(data >> 8);
+        break;
     }
 }
 
