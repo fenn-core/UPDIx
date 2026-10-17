@@ -8,6 +8,7 @@
 #define UPDIX_NVMPROG_KEY_BIT 0x04
 
 #define UPDIX_RELEASE_SYS_RESET 0x00
+#define UPDIX_DISABLE_UPDI 0x0C  // disables both UPDI and collision detection 
 #define UPDIX_ASSERT_SYS_RESET 0x59
 
 #define UPDIX_GET_BIT(mask, bit) (((mask >> bit) & 0x01))
@@ -53,4 +54,16 @@ updix_status_t updix_enter_progmode(void)
     }
 
     return UPDIX_ERROR_TIMEOUT;
+}
+
+
+updix_status_t updix_exit_progmode(void)
+{
+    UPDIX_CHECK_STATUS(updix_stcs(UPDIX_CS_ASI_RESET_REQ, UPDIX_ASSERT_SYS_RESET));
+
+    UPDIX_CHECK_STATUS(updix_stcs(UPDIX_CS_ASI_RESET_REQ, UPDIX_RELEASE_SYS_RESET));
+
+    UPDIX_CHECK_STATUS(updix_stcs(UPDIX_CS_CTRLB, UPDIX_DISABLE_UPDI));
+
+    return UPDIX_OK;
 }
