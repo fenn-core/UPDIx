@@ -1,8 +1,6 @@
 #include <stdint.h>
 #include "updix.h"
 
-#define UPDIX_POLL_MAX_TRIES 1000
-
 #define UPDIX_LOCKSTATUS_BIT 0x00
 #define UPDIX_PROGMODE_BIT 0x03
 #define UPDIX_NVMPROG_KEY_BIT 0x04
@@ -10,8 +8,6 @@
 #define UPDIX_RELEASE_SYS_RESET 0x00
 #define UPDIX_DISABLE_UPDI 0x0C  // disables both UPDI and collision detection 
 #define UPDIX_ASSERT_SYS_RESET 0x59
-
-#define UPDIX_GET_BIT(mask, bit) (((mask >> bit) & 0x01))
 
 
 updix_status_t updix_enter_progmode(void)

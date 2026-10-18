@@ -4,6 +4,10 @@
 #define UPDIX_SYNCH 0x55
 #define UPDIX_ACK 0x40
 
+#define UPDIX_POLL_MAX_TRIES 1000
+
+#define UPDIX_GET_BIT(mask, bit) (((mask >> bit) & 0x01))
+
 #define UPDIX_CHECK_STATUS(code)                                                         \
     do                                                                                   \
     {                                                                                    \
@@ -23,6 +27,7 @@ typedef enum
     UPDIX_ERROR_ACK,
     UPDIX_ERROR_PROTOCOL,
     UPDIX_ERROR_TARGET_LOCKED,
+    UPDIX_ERROR_NVM,
 } updix_status_t;
 
 
