@@ -83,3 +83,15 @@ updix_status_t nvm_p0_execute_command(updix_nvm_command_t command)
 
     return UPDIX_OK;
 }
+
+
+updix_status_t nvm_p0_chip_erase(void)
+{
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_CHIP_ERASE));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    return UPDIX_OK;
+}
