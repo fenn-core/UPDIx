@@ -74,3 +74,12 @@ updix_status_t nvm_p0_wait_ready(void)
 
     return UPDIX_ERROR_TIMEOUT;
 }
+
+
+updix_status_t nvm_p0_execute_command(updix_nvm_command_t command)
+{
+    UPDIX_CHECK_STATUS(updix_sts(NVMCTRL_REG_ADDR(CTRLA), UPDIX_ADDRESS_SIZE_16,
+                                 UPDIX_DATA_SIZE_8, command));
+
+    return UPDIX_OK;
+}
