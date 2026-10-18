@@ -170,3 +170,15 @@ updix_status_t nvm_p0_write_eeprom(uint32_t addr, updix_address_size_t address_s
 
     return UPDIX_OK;
 }
+
+
+updix_status_t nvm_p0_erase_eeprom(void)
+{
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_ERASE_EEPROM));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    return UPDIX_OK;
+}
