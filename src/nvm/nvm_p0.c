@@ -129,3 +129,24 @@ updix_status_t nvm_p0_erase_flash_page(uint32_t addr, updix_address_size_t addre
 
     return UPDIX_OK;
 }
+
+
+updix_status_t nvm_p0_erase_write_flash_page(uint32_t addr,
+                                             updix_address_size_t address_size,
+                                             const uint8_t *data, uint16_t size)
+{
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_PAGE_BUFFER_CLR));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    UPDIX_CHECK_STATUS(
+        updix_write_block(addr, address_size, UPDIX_DATA_SIZE_16, data, (size / 2)));
+
+    UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_ERASE_WRITE_PAGE));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    return UPDIX_OK;
+}
