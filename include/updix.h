@@ -28,6 +28,7 @@ typedef enum
     UPDIX_ERROR_PROTOCOL,
     UPDIX_ERROR_TARGET_LOCKED,
     UPDIX_ERROR_NVM,
+    UPDIX_ERROR_VERIFY,
 } updix_status_t;
 
 

@@ -187,7 +187,7 @@ updix_status_t updix_repeat(uint8_t repeat_count)
 }
 
 
-updix_status_t updix_read_block(uint32_t address, updix_address_size_t address_size,
+updix_status_t updix_read_block(uint32_t addr, updix_address_size_t address_size,
                                 updix_data_size_t data_size, uint8_t *buffer,
                                 uint16_t element_count)
 {
@@ -200,7 +200,7 @@ updix_status_t updix_read_block(uint32_t address, updix_address_size_t address_s
 
     uint8_t tx_buffer[2] = {0x00};
 
-    UPDIX_CHECK_STATUS(updix_st(UPDIX_POINTER_MODE_REGISTER, address_size, address));
+    UPDIX_CHECK_STATUS(updix_st(UPDIX_POINTER_MODE_REGISTER, address_size, addr));
 
     UPDIX_CHECK_STATUS(updix_repeat(element_count - 1));
 
@@ -214,7 +214,7 @@ updix_status_t updix_read_block(uint32_t address, updix_address_size_t address_s
 }
 
 
-updix_status_t updix_write_block(uint32_t address, updix_address_size_t address_size,
+updix_status_t updix_write_block(uint32_t addr, updix_address_size_t address_size,
                                  updix_data_size_t data_size, const uint8_t *buffer,
                                  uint16_t element_count)
 {
@@ -228,7 +228,7 @@ updix_status_t updix_write_block(uint32_t address, updix_address_size_t address_
     uint8_t tx_buffer[2] = {0x00};
     uint8_t rx_buffer[1] = {0x00};
 
-    UPDIX_CHECK_STATUS(updix_st(UPDIX_POINTER_MODE_REGISTER, address_size, address));
+    UPDIX_CHECK_STATUS(updix_st(UPDIX_POINTER_MODE_REGISTER, address_size, addr));
 
     UPDIX_CHECK_STATUS(updix_repeat(element_count - 1));
 
