@@ -182,3 +182,22 @@ updix_status_t nvm_p0_erase_eeprom(void)
 
     return UPDIX_OK;
 }
+
+
+updix_status_t nvm_p0_write_fuse(uint16_t fuse_address, uint8_t value)
+{
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    UPDIX_CHECK_STATUS(updix_sts(NVMCTRL_REG_ADDR(ADDR), UPDIX_ADDRESS_SIZE_16,
+                                 UPDIX_DATA_SIZE_16, fuse_address));
+
+    UPDIX_CHECK_STATUS(updix_sts(NVMCTRL_REG_ADDR(DATA), UPDIX_ADDRESS_SIZE_16,
+                                 UPDIX_DATA_SIZE_8, value));
+
+    UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_WRITE_FUSE));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    return UPDIX_OK;
+}
+
