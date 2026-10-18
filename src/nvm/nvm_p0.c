@@ -41,3 +41,36 @@ typedef enum
     UPDIX_NVM_ERASE_EEPROM = 0x06,
     UPDIX_NVM_WRITE_FUSE = 0x07,
 } updix_nvm_command_t;
+
+
+static updix_status_t nvm_p0_check_status(uint16_t *buffer)
+{
+    UPDIX_CHECK_STATUS(updix_lds(NVMCTRL_REG_ADDR(STATUS), UPDIX_ADDRESS_SIZE_16,
+                                 UPDIX_DATA_SIZE_8, buffer));
+
+    if (UPDIX_GET_BIT(*buffer, UPDIX_NVM_WRITE_ERROR_BIT))
+    {
+        return UPDIX_ERROR_NVM;
+    }
+
+    return UPDIX_OK;
+}
+
+
+updix_status_t nvm_p0_wait_ready(void)
+{
+    uint16_t buffer[1];
+
+    for (uint16_t i = 0; i < UPDIX_POLL_MAX_TRIES; ++i)
+    {
+        UPDIX_CHECK_STATUS(nvm_p0_check_status(buffer));
+
+        if (!(UPDIX_GET_BIT(*buffer, UPDIX_NVM_FLASH_BUSY_BIT) |
+              UPDIX_GET_BIT(*buffer, UPDIX_NVM_EEPROM_BUSY_BIT)))
+        {
+            return UPDIX_OK;
+        }
+    }
+
+    return UPDIX_ERROR_TIMEOUT;
+}
