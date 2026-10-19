@@ -21,6 +21,7 @@ typedef struct
 } NVMCTRL_TypeDef;
 
 extern uint32_t NVMCTRL_BASE;
+#define NVMCTRL_BASE 0x1000 // placeholder, don't forget to remove
 
 #define NVMCTRL_REG_ADDR(reg) (NVMCTRL_BASE + offsetof(NVMCTRL_TypeDef, reg))
 
