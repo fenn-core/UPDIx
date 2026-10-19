@@ -1,6 +1,8 @@
 #ifndef INC_UPDIX_UPDIX_H_
 #define INC_UPDIX_UPDIX_H_
 
+#include <stdint.h>
+
 #define UPDIX_SYNCH 0x55
 #define UPDIX_ACK 0x40
 
