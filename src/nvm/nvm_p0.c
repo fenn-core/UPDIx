@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 #include "updix.h"
 
 #define UPDIX_NVM_FLASH_BUSY_BIT 0x00
@@ -195,6 +196,32 @@ updix_status_t nvm_p0_write_fuse(uint16_t fuse_address, uint8_t value)
                                  UPDIX_DATA_SIZE_8, value));
 
     UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_WRITE_FUSE));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    return UPDIX_OK;
+}
+
+
+updix_status_t nvm_p0_write_user_row(uint32_t addr, updix_address_size_t address_size,
+                                     const uint8_t *data, uint16_t size)
+{
+    return nvm_p0_write_eeprom(addr, address_size, data, size);
+}
+
+
+updix_status_t nvm_p0_erase_user_row(uint32_t addr, updix_address_size_t address_size,
+                                     uint16_t size)
+{
+    uint8_t tx_buffer[256];
+    memset(tx_buffer, 0xFF, sizeof(tx_buffer));
+
+    UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
+
+    UPDIX_CHECK_STATUS(
+        updix_write_block(addr, address_size, UPDIX_DATA_SIZE_8, tx_buffer, size));
+
+    UPDIX_CHECK_STATUS(nvm_p0_execute_command(UPDIX_NVM_ERASE_PAGE));
 
     UPDIX_CHECK_STATUS(nvm_p0_wait_ready());
 
