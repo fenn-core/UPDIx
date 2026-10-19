@@ -81,14 +81,14 @@ typedef enum
 
 typedef enum
 {
-    UPDIX_CS_STATUSA        = 0x00,
-    UPDIX_CS_STATUSB        = 0x01,
-    UPDIX_CS_CTRLA          = 0x02,
-    UPDIX_CS_CTRLB          = 0x03,
+    UPDIX_CS_STATUSA = 0x00,
+    UPDIX_CS_STATUSB = 0x01,
+    UPDIX_CS_CTRLA = 0x02,
+    UPDIX_CS_CTRLB = 0x03,
     UPDIX_CS_ASI_KEY_STATUS = 0x07,
-    UPDIX_CS_ASI_RESET_REQ  = 0x08,
-    UPDIX_CS_ASI_CTRLA      = 0x09,
-    UPDIX_CS_ASI_SYS_CTRLA  = 0x0A,
+    UPDIX_CS_ASI_RESET_REQ = 0x08,
+    UPDIX_CS_ASI_CTRLA = 0x09,
+    UPDIX_CS_ASI_SYS_CTRLA = 0x0A,
     UPDIX_CS_ASI_SYS_STATUS = 0x0B,
     UPDIX_CS_ASI_CRC_STATUS = 0x0C,
 } updix_cs_register_t;

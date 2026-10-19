@@ -200,4 +200,3 @@ updix_status_t nvm_p0_write_fuse(uint16_t fuse_address, uint8_t value)
 
     return UPDIX_OK;
 }
-

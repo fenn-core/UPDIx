@@ -11,9 +11,11 @@ updix_status_t updix_verify_memory(uint32_t addr, updix_address_size_t address_s
 
     while (remaining > 0)
     {
-        uint8_t chunk_size = remaining < sizeof(rx_buffer) ? remaining : sizeof(rx_buffer);
+        uint8_t chunk_size =
+            remaining < sizeof(rx_buffer) ? remaining : sizeof(rx_buffer);
 
-        UPDIX_CHECK_STATUS(updix_read_block(addr, address_size, UPDIX_DATA_SIZE_8, rx_buffer, chunk_size));
+        UPDIX_CHECK_STATUS(updix_read_block(addr, address_size, UPDIX_DATA_SIZE_8,
+                                            rx_buffer, chunk_size));
 
         for (int i = 0; i < chunk_size; ++i)
         {
