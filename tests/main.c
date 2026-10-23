@@ -1,4 +1,4 @@
-#include "test.h"
+#include "updix_test.h"
 #include "updix.h"
 
 
@@ -9,7 +9,9 @@ int main(void)
     updix_write_block(0x10, UPDIX_ADDRESS_SIZE_8,
         UPDIX_DATA_SIZE_8, buffer, 6);
 
-    updix_uart_debug_print();
+    updix_uart_test_print();
+
+    updix_test_lds();
 
     return 0;
 }

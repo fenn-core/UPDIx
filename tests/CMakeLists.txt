@@ -9,11 +9,11 @@ cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH PARENT_DIR)
 add_executable(UPDIx_test
     main.c
     updix_uart_test.c
+    test_instructions.c
     ${PARENT_DIR}/src/updix_memory.c
     ${PARENT_DIR}/src/updix_protocol.c
     ${PARENT_DIR}/src/updix_session.c
     ${PARENT_DIR}/src/nvm/nvm_p0.c
-        cmake-build-debug/test.h
 )
 
 target_include_directories(UPDIx_test

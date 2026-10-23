@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include <string.h>
 #include "updix_uart.h"
 
@@ -7,8 +8,6 @@
 static uint8_t tx_buffer[UPDIX_TEST_BUFFER_SIZE] = {0x00};
 static uint8_t rx_buffer[UPDIX_TEST_BUFFER_SIZE];
 
-static char pretty_print[UPDIX_TEST_BUFFER_SIZE * 6];
-static size_t pretty_print_pos = 0;
 /*
  * There are 3 chars used per byte ex: "FF\n"
  * the worst case: single byte per transfer is assumed here.
@@ -16,6 +15,14 @@ static size_t pretty_print_pos = 0;
  * Which also equate to 3 chars: "TX\n", "RX\n"
  */
 
+static char pretty_print[UPDIX_TEST_BUFFER_SIZE * 6];
+static size_t pretty_print_pos = 0;
+
+/*
+ * The UART tests here are at the protocol level,
+ * Therefore the code here does not provide testing
+ * for hardware related issues.
+ */
 
 updix_uart_status_t updix_uart_tx(const uint8_t *data, size_t len)
 {
@@ -35,9 +42,6 @@ updix_uart_status_t updix_uart_tx(const uint8_t *data, size_t len)
 
 updix_uart_status_t updix_uart_rx(uint8_t *data, size_t len)
 {
-    memset(rx_buffer, 0x40, sizeof(rx_buffer));
-    // simulate ACK bytes
-
     strcpy((pretty_print + pretty_print_pos), "RX\n");
     pretty_print_pos += 3;
     for (size_t i = 0; i < len; ++i)
@@ -52,7 +56,30 @@ updix_uart_status_t updix_uart_rx(uint8_t *data, size_t len)
 }
 
 
-void updix_uart_debug_print(void)
+void updix_uart_test_reset(void) {
+    memset(tx_buffer, 0x00, sizeof(tx_buffer));
+    memset(rx_buffer, 0x00, sizeof(rx_buffer));
+    memset(pretty_print, ' ', sizeof(pretty_print));
+    pretty_print[UPDIX_TEST_BUFFER_SIZE * 6 - 1] = '\0';
+    pretty_print_pos = 0;
+}
+
+
+void updix_uart_test_set_rx(const uint8_t *data, size_t len) {
+    for (size_t i = 0; i < len; ++i) {
+        rx_buffer[i] = data[i];
+    }
+}
+
+
+void updix_uart_test_expect_tx(const uint8_t *expected, size_t len) {
+    for (size_t i = 0; i < len; ++i) {
+        assert((expected[i] == tx_buffer[i]));
+    }
+}
+
+
+void updix_uart_test_print(void)
 {
     printf("%s\n", pretty_print);
 }
