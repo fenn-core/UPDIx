@@ -36,4 +36,7 @@ updix_uart_status_t updix_uart_tx(const uint8_t *data, size_t len);
 updix_uart_status_t updix_uart_rx(uint8_t *data, size_t len);
 
 
+void updix_stm32hal_bind(void *uart_handle);
+
+
 #endif

@@ -8,7 +8,7 @@
 
 #define UPDIX_POLL_MAX_TRIES 1000
 
-#define UPDIX_GET_BIT(mask, bit) (((mask >> bit) & 0x01))
+#define UPDIX_GET_BIT(mask, bit) ((((mask) >> bit) & 0x01))
 
 #define UPDIX_CHECK_STATUS(code)                                                         \
     do                                                                                   \
